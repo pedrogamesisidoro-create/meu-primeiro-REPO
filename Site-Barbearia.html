@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seu Nome Aqui - Beleza & Estilo</title>
+
+  <!-- Google Fonts: Inter & Playfair Display para elegância -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-dark: #121824;
+      --accent-gold: #c5a059;
+      --accent-gold-hover: #b08d46;
+      --bg-soft: #f8f9fa;
+      --text-main: #2b2b2b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, .brand-font {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Navbar Customizada */
+    .navbar {
+      background-color: var(--primary-dark) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .navbar-brand {
+      color: var(--accent-gold) !important;
+      letter-spacing: 1px;
+      font-size: 1.35rem;
+    }
+    .nav-link {
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent-gold) !important;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(rgba(18, 24, 36, 0.85), rgba(18, 24, 36, 0.85)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1400') center/cover no-repeat;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+    }
+    .hero-title {
+      font-size: 3rem;
+      color: #ffffff;
+    }
+    .hero-subtitle {
+      color: #e0e0e0;
+      font-weight: 300;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Cards de Serviços */
+    .card-service {
+      border: none;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      height: 100%;
+    }
+    .card-service:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+    .badge-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background-color: #f1f3f5;
+      padding: 6px 16px;
+      border-radius: 30px;
+    }
+
+    /* Seção de Administração */
+    #admin-section {
+      display: none;
+      background-color: #ffffff;
+      border-bottom: 3px solid var(--accent-gold);
+    }
+    .card-kpi {
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Botões */
+    .btn-gold {
+      background-color: var(--accent-gold);
+      color: #ffffff;
+      font-weight: 600;
+      border: none;
+      transition: background-color 0.2s ease;
+    }
+    .btn-gold:hover {
+      background-color: var(--accent-gold-hover);
+      color: #ffffff;
+    }
+
+    /* Notificação Toast */
+    #custom-alert {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      min-width: 300px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Alerta / Notificação Customizada -->
+  <div id="custom-alert" class="alert alert-warning alert-dismissible fade show shadow-lg" role="alert">
+    <span id="custom-alert-msg"></span>
+    <button type="button" class="btn-close" onclick="closeCustomAlert()"></button>
+  </div>
+
+  <!-- 1. NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold brand-font" href="#">
+        <i class="fa-solid fa-scissors me-2"></i>SEU NOME AQUI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
+          <li class="nav-item"><a class="nav-link" href="#agendar">Agendar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#meus-agendamentos">Meus Agendamentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#localizacao">Localização</a></li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-gold btn-sm ms-lg-3 mt-2 mt-lg-0 px-3 py-2 rounded-pill" onclick="toggleAdminSection()">
+              <i class="fa-solid fa-user-gear me-1"></i> Área de ADM
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. HERO SECTION -->
+  <section class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold hero-title brand-font mb-3">SEU NOME AQUI</h1>
+      <p class="lead hero-subtitle mb-4">Renove seu estilo e autoestima com profissionais qualificados em um ambiente aconchegante e sofisticado.</p>
+      <a href="#agendar" class="btn btn-gold btn-lg px-4 rounded-pill shadow">Agendar Meu Horário</a>
+    </div>
+  </section>
+
+  <!-- 3. SEÇÃO DE ADMINISTRAÇÃO (ÁREA DO PAINEL ADM) -->
+  <section id="admin-section" class="py-5 shadow-inner">
+    <div class="container" style="max-width: 900px;">
+      <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h3 class="fw-bold m-0"><i class="fa-solid fa-chart-line text-warning me-2"></i>Painel Administrativo - Seu Noome Aqui</h3>
+        <button class="btn btn-outline-secondary btn-sm" onclick="toggleAdminSection()"><i class="fa-solid fa-xmark me-1"></i>Fechar</button>
+      </div>
+
+      <!-- Formulário de Login do Admin -->
+      <div id="admin-login-box" class="card p-4 shadow-sm border-0">
+        <h5 class="fw-bold mb-2"><i class="fa-solid fa-lock me-2 text-dark"></i>Acesso Restrito</h5>
+        <p class="text-muted small mb-3">Informe a senha para acessar as métricas e configurações do salão. (Senha padrão: <strong>1234</strong>)</p>
+        <div class="input-group mb-2" style="max-width: 450px;">
+          <input type="password" id="adminPassInput" class="form-control" placeholder="Digite a senha de administrador">
+          <button class="btn btn-dark px-4" onclick="loginAdmin()">Entrar</button>
+        </div>
+      </div>
+
+      <!-- Conteúdo do Painel do Administrador -->
+      <div id="admin-content-box" style="display: none;">
+        
+        <!-- Relatório de Faturamento -->
+        <div class="card p-4 mb-4 bg-dark text-white card-kpi shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold m-0 text-warning"><i class="fa-solid fa-sack-dollar me-2"></i>Controle Financeiro</h5>
+            <span class="badge bg-warning text-dark px-3 py-2">Métricas</span>
+          </div>
+
+          <div class="row g-3 align-items-center mb-3">
+            <div class="col-md-6">
+              <label class="form-label small text-white-50">Filtrar por Data Específica:</label>
+              <input type="date" id="revenueDate" class="form-control form-control-sm bg-light text-dark" onchange="calculateRevenue()">
+            </div>
+            <div class="col-md-6 text-md-end">
+              <button class="btn btn-outline-light btn-sm mt-3 mt-md-0" onclick="setRevenueToToday()"><i class="fa-solid fa-calendar-day me-1"></i>Ver Hoje</button>
+            </div>
+          </div>
+
+          <div class="row text-center g-3 pt-2">
+            <div class="col-6 border-end border-secondary">
+              <small class="text-white-50 d-block">Faturamento do Dia Selecionado</small>
+              <span class="fs-2 fw-bold text-success" id="dailyRevenue">R$ 0,00</span>
+              <div class="small text-white-50" id="dailyAppointmentsCount">0 agendamento(s)</div>
+            </div>
+            <div class="col-6">
+              <small class="text-white-50 d-block">Faturamento Total Geral</small>
+              <span class="fs-2 fw-bold text-info" id="totalRevenue">R$ 0,00</span>
+              <div class="small text-white-50" id="totalAppointmentsCount">0 agendamento(s) acoplados</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Adicionar Novo Serviço -->
+        <div class="card p-4 mb-4 bg-light border-0 shadow-sm">
+          <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-plus-circle me-1 text-success"></i>Adicionar Novo Serviço</h6>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <input type="text" id="newServiceName" class="form-control" placeholder="Nome do Serviço (Ex: Penteado / Barba Completa)">
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="number" id="newServicePrice" class="form-control" placeholder="Preço" step="0.01">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button onclick="addNewService()" class="btn btn-success w-100 fw-bold">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gerenciar Serviços Existentes -->
+        <div class="card p-4 mb-4 border-0 shadow-sm">
+          <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-1 text-primary"></i>Gerenciar Serviços e Tabela de Preços</h6>
+          <div id="adminServicesList"></div>
+        </div>
+
+        <!-- Gerenciar Agendamentos dos Clientes -->
+        <div class="card p-4 mb-4 border-0 shadow-sm">
+          <h6 class="fw-bold mb-3"><i class="fa-solid fa-calendar-days me-1 text-warning"></i>Lista de Agendamentos Realizados</h6>
+          <div id="adminAppointmentsList" style="max-height: 300px; overflow-y: auto;"></div>
+        </div>
+
+        <!-- Trocar Senha Admin -->
+        <div class="card p-4 border-0 shadow-sm">
+          <h6 class="fw-bold mb-2"><i class="fa-solid fa-shield-halved me-1 text-danger"></i>Alterar Senha do Administrador</h6>
+          <div class="row g-2">
+            <div class="col-md-8">
+              <input type="password" id="changeAdminPass" class="form-control" placeholder="Nova Senha para o Admin">
+            </div>
+            <div class="col-md-4">
+              <button onclick="updateAdminPassword()" class="btn btn-dark w-100 fw-bold">Salvar Nova Senha</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SEÇÃO DE SERVIÇOS -->
+  <section id="servicos" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="text-uppercase text-muted fw-semibold small">Menu do Salão</span>
+        <h2 class="fw-bold brand-font">Nossos Serviços & Valores</h2>
+        <p class="text-muted">Escolha a melhor opção para o seu cuidado e renovação visual.</p>
+      </div>
+
+      <div class="row g-4" id="services-container"></div>
+    </div>
+  </section>
+
+  <!-- 5. SEÇÃO DE AGENDAMENTO COM VALIDAÇÃO DE HORÁRIO -->
+  <section id="agendar" class="py-5 bg-white">
+    <div class="container" style="max-width: 700px;">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold brand-font">Agende Seu Horário</h2>
+        <p class="text-muted">Selecione o serviço, dia e horário desejado. Nosso sistema impede agendamentos em duplicidade!</p>
+      </div>
+
+      <form id="booking-form" class="shadow-sm p-4 rounded-4 border bg-light">
+        <div class="mb-3">
+          <label for="clientName" class="form-label fw-semibold">Seu Nome Completo</label>
+          <input type="text" class="form-control" id="clientName" placeholder="Ex: Maria Silva / João Pedro" required>
+        </div>
+        <div class="mb-3">
+          <label for="clientPhone" class="form-label fw-semibold">Telefone / WhatsApp</label>
+          <input type="tel" class="form-control" id="clientPhone" placeholder="Ex: (82) 99999-9999" required>
+        </div>
+        <div class="mb-3">
+          <label for="serviceSelect" class="form-label fw-semibold">Escolha o Serviço</label>
+          <select class="form-select" id="serviceSelect" required></select>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="bookingDate" class="form-label fw-semibold">Data</label>
+            <input type="date" class="form-control" id="bookingDate" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="bookingTime" class="form-label fw-semibold">Horário Disponível</label>
+            <select class="form-select" id="bookingTime" required>
+              <option value="">Selecione um horário</option>
+              <option value="08:00">08:00</option>
+              <option value="08:30">08:30</option>
+              <option value="09:00">09:00</option>
+              <option value="09:30">09:30</option>
+              <option value="10:00">10:00</option>
+              <option value="10:30">10:30</option>
+              <option value="11:00">11:00</option>
+              <option value="11:30">11:30</option>
+              <option value="14:00">14:00</option>
+              <option value="14:30">14:30</option>
+              <option value="15:00">15:00</option>
+              <option value="15:30">15:30</option>
+              <option value="16:00">16:00</option>
+              <option value="16:30">16:30</option>
+              <option value="17:00">17:00</option>
+              <option value="17:30">17:30</option>
+              <option value="18:00">18:00</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold btn-lg w-100 mt-3 rounded-3 shadow-sm">
+          <i class="fa-regular fa-circle-check me-2"></i>Confirmar Agendamento
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 6. SEÇÃO MEUS AGENDAMENTOS -->
+  <section id="meus-agendamentos" class="py-5">
+    <div class="container" style="max-width: 850px;">
+      <h3 class="fw-bold brand-font mb-3"><i class="fa-solid fa-calendar-check me-2 text-warning"></i>Meus Agendamentos Registrados</h3>
+      <p class="text-muted small mb-4">Abaixo estão listadas as reservas efetuadas no navegador.</p>
+      <div id="user-appointments-list"></div>
+    </div>
+  </section>
+
+  <!-- 7. SEÇÃO DE LOCALIZAÇÃO EM MACEIÓ-AL (GOOGLE MAPS) -->
+  <section id="localizacao" class="py-5 bg-white border-top">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Detalhes do Endereço -->
+        <div class="col-lg-5 mb-4 mb-lg-0">
+          <span class="text-warning fw-bold text-uppercase small">Maceió - Alagoas</span>
+          <h2 class="fw-bold brand-font mb-3">Nossa Localização</h2>
+          <p class="text-muted mb-4">Venha vivenciar uma experiência completa no Seu Nome Aqui. Ambiente moderno, confortável e bem localizado.</p>
+          
+          <div class="d-flex align-items-start mb-3">
+            <i class="fa-solid fa-location-dot text-dark fs-5 me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1">Endereço Principal</h6>
+              <p class="text-muted small mb-0">Av. Doutor Antônio Gouveia, Pajuçara, Maceió - AL, 57030-170</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-3">
+            <i class="fa-solid fa-clock text-dark fs-5 me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1">Horário de Funcionamento</h6>
+              <p class="text-muted small mb-0">Terça a Sábado: 08:00 às 19:00</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-4">
+            <i class="fa-brands fa-whatsapp text-success fs-5 me-3 mt-1"></i>
+            <div>
+              <h6 class="fw-bold mb-1">WhatsApp de Atendimento</h6>
+              <p class="text-muted small mb-0">(82) 99999-9999</p>
+            </div>
+          </div>
+
+          <a href="https://www.google.com/maps/search/?api=1&query=Maceio+AL" target="_blank" class="btn btn-outline-dark btn-sm fw-bold rounded-pill px-3">
+            <i class="fa-solid fa-diamond-turn-right me-1"></i> Abrir no GPS / Google Maps
+          </a>
+        </div>
+
+        <!-- Mapa Interativo do Google Maps -->
+        <div class="col-lg-7">
+          <div class="shadow-sm rounded-4 overflow-hidden border" style="min-height: 380px;">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62888.6277983675!2d-35.7533816!3d-9.6498528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x701458021d743a1%3A0x86efa7efbf3e438e!2sMacei%C3%B3%2C%20AL!5e0!3m2!1wpt-BR!2sbr!4v1680000000000!5m2!1wpt-BR!2sbr" 
+              width="100%" 
+              height="380" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+      <p class="mb-1 fw-semibold">Seu Nome Aqui &copy; 2026 - Todos os direitos reservados</p>
+      <p class="text-white-50 small mb-0">Maceió - AL | Atendimento presencial e agendamento online</p>
+    </div>
+  </footer>
+
+  <!-- Scripts JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Configurações do LocalStorage para o Seu Nome Aqui
+    let adminPassword = localStorage.getItem('novacriatura_admin_pass') || '1234';
+
+    let services = JSON.parse(localStorage.getItem('novacriatura_services')) || [
+      { id: 1, name: 'Corte de Cabelo', price: 30 },
+      { id: 2, name: 'Cabelo + Sobrancelha', price: 40 },
+      { id: 3, name: 'Cabelo + Barba', price: 55 }
+    ];
+
+    let appointments = JSON.parse(localStorage.getItem('novacriatura_appointments')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderServices();
+      renderUserAppointments();
+      setMinDate();
+      setRevenueToToday();
+    });
+
+    function showCustomAlert(msg, isError = false) {
+      const alertBox = document.getElementById('custom-alert');
+      const msgBox = document.getElementById('custom-alert-msg');
+      
+      alertBox.className = `alert ${isError ? 'alert-danger' : 'alert-success'} alert-dismissible fade show shadow-lg`;
+      msgBox.innerHTML = msg;
+      alertBox.style.display = 'block';
+
+      setTimeout(() => {
+        closeCustomAlert();
+      }, 5000);
+    }
+
+    function closeCustomAlert() {
+      document.getElementById('custom-alert').style.display = 'none';
+    }
+
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('bookingDate').setAttribute('min', today);
+    }
+
+    // Função para Alternar Seção ADM (Exibe / Oculta)
+    function toggleAdminSection() {
+      const adminSection = document.getElementById('admin-section');
+      if (adminSection.style.display === 'block') {
+        adminSection.style.display = 'none';
+      } else {
+        adminSection.style.display = 'block';
+        adminSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function loginAdmin() {
+      const inputPass = document.getElementById('adminPassInput').value;
+      if (inputPass === adminPassword) {
+        document.getElementById('admin-login-box').style.display = 'none';
+        document.getElementById('admin-content-box').style.display = 'block';
+        renderAdminServices();
+        renderAdminAppointments();
+        calculateRevenue();
+        showCustomAlert('Acesso concedido ao Painel!');
+      } else {
+        showCustomAlert('Senha incorreta! Tente novamente.', true);
+      }
+    }
+
+    function setRevenueToToday() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('revenueDate').value = today;
+      calculateRevenue();
+    }
+
+    function calculateRevenue() {
+      const selectedDate = document.getElementById('revenueDate').value;
+      let dailyTotal = 0;
+      let dailyCount = 0;
+      let grandTotal = 0;
+
+      appointments.forEach(a => {
+        const service = services.find(s => s.name === a.service);
+        const price = service ? parseFloat(service.price) : 0;
+
+        grandTotal += price;
+
+        if (a.date === selectedDate) {
+          dailyTotal += price;
+          dailyCount++;
+        }
+      });
+
+      document.getElementById('dailyRevenue').innerText = 'R$ ' + dailyTotal.toFixed(2);
+      document.getElementById('dailyAppointmentsCount').innerText = `${dailyCount} agendamento(s)`;
+
+      document.getElementById('totalRevenue').innerText = 'R$ ' + grandTotal.toFixed(2);
+      document.getElementById('totalAppointmentsCount').innerText = `${appointments.length} agendamento(s) acumulados`;
+    }
+
+    function renderServices() {
+      const container = document.getElementById('services-container');
+      const select = document.getElementById('serviceSelect');
+      
+      if (services.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center text-muted"><p>Nenhum serviço disponível no momento.</p></div>';
+        select.innerHTML = '<option value="">Nenhum serviço disponível</option>';
+        return;
+      }
+
+      container.innerHTML = services.map(s => `
+        <div class="col-md-4">
+          <div class="card card-service p-4 text-center">
+            <h4 class="fw-bold brand-font mb-2">${s.name}</h4>
+            <div class="my-3"><span class="badge-price">R$ ${parseFloat(s.price).toFixed(2)}</span></div>
+            <a href="#agendar" onclick="selectService(${s.id})" class="btn btn-outline-dark btn-sm mt-auto rounded-pill px-4">Agendar Este</a>
+          </div>
+        </div>
+      `).join('');
+
+      select.innerHTML = services.map(s => `
+        <option value="${s.name}"> ${s.name} - R$ ${parseFloat(s.price).toFixed(2)}</option>
+      `).join('');
+    }
+
+    function selectService(id) {
+      const service = services.find(s => s.id === id);
+      if(service) {
+        document.getElementById('serviceSelect').value = service.name;
+      }
+    }
+
+    // SUBMISSÃO DO AGENDAMENTO COM VALIDAÇÃO DE HORÁRIO OCUPADO
+    document.getElementById('booking-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const selectedDate = document.getElementById('bookingDate').value;
+      const selectedTime = document.getElementById('bookingTime').value;
+
+      // VALIDAÇÃO CRÍTICA: Bloqueia duplicidade no mesmo dia e horário
+      const isTimeOccupied = appointments.some(a => a.date === selectedDate && a.time === selectedTime);
+
+      if (isTimeOccupied) {
+        showCustomAlert(`O horário <strong>${selectedTime}</strong> no dia <strong>${selectedDate}</strong> já está reservado. Por favor, escolha outro horário!`, true);
+        return;
+      }
+
+      const newAppointment = {
+        id: '#' + Math.floor(1000 + Math.random() * 9000),
+        name: document.getElementById('clientName').value,
+        phone: document.getElementById('clientPhone').value,
+        service: document.getElementById('serviceSelect').value,
+        date: selectedDate,
+        time: selectedTime,
+        status: 'Confirmado'
+      };
+
+      appointments.push(newAppointment);
+      localStorage.setItem('novacriatura_appointments', JSON.stringify(appointments));
+      
+      showCustomAlert(`Agendamento realizado com sucesso! Código da reserva: <strong>${newAppointment.id}</strong>`);
+      document.getElementById('booking-form').reset();
+      renderUserAppointments();
+      
+      if(document.getElementById('admin-content-box').style.display === 'block') {
+        renderAdminAppointments();
+        calculateRevenue();
+      }
+    });
+
+    function renderUserAppointments() {
+      const container = document.getElementById('user-appointments-list');
+      if (appointments.length === 0) {
+        container.innerHTML = '<p class="text-muted">Nenhum agendamento cadastrado neste dispositivo.</p>';
+        return;
+      }
+
+      container.innerHTML = appointments.map(a => `
+        <div class="card mb-2 p-3 border-0 shadow-sm d-flex flex-row justify-content-between align-items-center">
+          <div>
+            <span class="badge bg-dark me-2">${a.id}</span> <strong class="brand-font">${a.service}</strong>
+            <div class="small text-muted mt-1"><i class="fa-regular fa-calendar me-1"></i>Data: ${a.date} às ${a.time} | Cliente: ${a.name}</div>
+          </div>
+          <span class="badge bg-success px-3 py-2 rounded-pill">${a.status}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminServices() {
+      const list = document.getElementById('adminServicesList');
+      if (services.length === 0) {
+        list.innerHTML = '<p class="small text-muted">Nenhum serviço cadastrado no sistema.</p>';
+        return;
+      }
+
+      list.innerHTML = services.map(s => `
+        <div class="input-group mb-2">
+          <input type="text" class="form-control" value="${s.name}" onchange="updateServiceName(${s.id}, this.value)">
+          <span class="input-group-text">R$</span>
+          <input type="number" class="form-control" value="${s.price}" step="0.01" onchange="updateServicePrice(${s.id}, this.value)">
+          <button class="btn btn-outline-danger" onclick="deleteService(${s.id})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    function addNewService() {
+      const nameInput = document.getElementById('newServiceName');
+      const priceInput = document.getElementById('newServicePrice');
+
+      const name = nameInput.value.trim();
+      const price = parseFloat(priceInput.value);
+
+      if (!name || isNaN(price) || price < 0) {
+        showCustomAlert('Por favor, informe um nome e valor válidos para o novo serviço.', true);
+        return;
+      }
+
+      services.push({ id: Date.now(), name: name, price: price });
+      saveServices();
+      nameInput.value = '';
+      priceInput.value = '';
+      renderAdminServices();
+      calculateRevenue();
+      showCustomAlert('Novo serviço adicionado com sucesso!');
+    }
+
+    function updateServiceName(id, newName) {
+      const s = services.find(x => x.id === id);
+      if(s && newName.trim() !== '') {
+        s.name = newName.trim();
+        saveServices();
+        showCustomAlert('Nome do serviço atualizado!');
+      }
+    }
+
+    function updateServicePrice(id, newPrice) {
+      const s = services.find(x => x.id === id);
+      const val = parseFloat(newPrice);
+      if(s && !isNaN(val)) {
+        s.price = val;
+        saveServices();
+        calculateRevenue();
+        showCustomAlert('Preço atualizado!');
+      }
+    }
+
+    function deleteService(id) {
+      if (confirm('Tem certeza que deseja remover este serviço?')) {
+        services = services.filter(s => s.id !== id);
+        saveServices();
+        renderAdminServices();
+        calculateRevenue();
+        showCustomAlert('Serviço removido.');
+      }
+    }
+
+    function saveServices() {
+      localStorage.setItem('novacriatura_services', JSON.stringify(services));
+      renderServices();
+    }
+
+    function renderAdminAppointments() {
+      const list = document.getElementById('adminAppointmentsList');
+      if (appointments.length === 0) {
+        list.innerHTML = '<p class="small text-muted">Sem agendamentos gravados.</p>';
+        return;
+      }
+      list.innerHTML = appointments.map(a => `
+        <div class="border-bottom py-2 d-flex justify-content-between align-items-center">
+          <div class="small">
+            <strong>${a.name}</strong> (${a.phone})<br>
+            <span class="text-primary fw-semibold">${a.service}</span> - ${a.date} às ${a.time}
+          </div>
+          <button class="btn btn-outline-danger btn-sm" onclick="cancelAppointment('${a.id}')"><i class="fa-solid fa-trash"></i> Cancelar</button>
+        </div>
+      `).join('');
+    }
+
+    function cancelAppointment(id) {
+      if (confirm('Deseja excluir este agendamento?')) {
+        appointments = appointments.filter(a => a.id !== id);
+        localStorage.setItem('novacriatura_appointments', JSON.stringify(appointments));
+        renderAdminAppointments();
+        renderUserAppointments();
+        calculateRevenue();
+        showCustomAlert('Agendamento excluído com sucesso.');
+      }
+    }
+
+    function updateAdminPassword() {
+      const newPass = document.getElementById('changeAdminPass').value.trim();
+      if (newPass.length < 3) {
+        showCustomAlert('A nova senha deve possuir pelo menos 3 caracteres.', true);
+        return;
+      }
+      adminPassword = newPass;
+      localStorage.setItem('novacriatura_admin_pass', adminPassword);
+      showCustomAlert('Senha de administrador alterada com sucesso!');
+      document.getElementById('changeAdminPass').value = '';
+    }
+  </script>
+</body>
+</html>
